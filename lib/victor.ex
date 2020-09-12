@@ -63,4 +63,11 @@ defmodule Victor do
 
     %Victor{victor | items: new_items}
   end
+
+  def rect(%{items: items} = victor, props) do
+    rect = {:rect, props, []}
+    new_items = [rect | items]
+
+    %Victor{victor | items: new_items}
+  end
 end
