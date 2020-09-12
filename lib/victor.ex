@@ -10,7 +10,18 @@ defmodule Victor do
   def new(), do: %Victor{}
 
   def add(%{items: items} = victor, tag, props, style \\ %{}) do
-    item = {tag, get_tag_props(props, style), []}
+    item =
+      case tag do
+        :text ->
+          {
+            tag,
+            get_tag_props(Map.drop(props, [:content]), style),
+            Map.get(props, :content)
+          }
+
+        _ ->
+          {tag, get_tag_props(props, style), []}
+      end
 
     %Victor{victor | items: [item | items]}
   end
@@ -46,7 +57,7 @@ defmodule Victor do
     |> Enum.join(" ")
   end
 
-  defp tag_to_string({tag, props, children}) do
+  defp tag_to_string({tag, props, children}) when is_list(children) do
     tag_name = Atom.to_string(tag)
     tag = ["<", tag_name, " ", props_to_string(props)]
 
@@ -72,6 +83,13 @@ defmodule Victor do
       end
 
     Enum.join(tag ++ tail)
+  end
+
+  defp tag_to_string({tag, props, children}) when is_bitstring(children) do
+    tag_name = Atom.to_string(tag)
+
+    ["<", tag_name, " ", props_to_string(props), ">", children, "</", tag_name, ">"]
+    |> Enum.join()
   end
 
   defp get_tag_props(props, style) when style == %{}, do: props
