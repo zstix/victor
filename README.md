@@ -1,5 +1,5 @@
 # Victor
 
-Simple Elixir library for creating SVG images.
+A simple solution for creating SVGs in Elixir.
 
 _What's your vector victor?_

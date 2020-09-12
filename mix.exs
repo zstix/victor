@@ -24,7 +24,7 @@ defmodule Victor.MixProject do
 
   defp description() do
     """
-    A simple solution for creating SVGs in Elixir
+    A simple solution for creating SVGs in Elixir.
     """
   end
 end
