@@ -9,6 +9,12 @@ defmodule Victor do
 
   def new(), do: %Victor{}
 
+  def add(%{items: items} = victor, tag, props, style \\ %{}) do
+    item = {tag, get_tag_props(props, style), []}
+
+    %Victor{victor | items: [item | items]}
+  end
+
   def get_svg(%{width: width, height: height, items: items}) do
     {
       :svg,
@@ -77,21 +83,5 @@ defmodule Victor do
       |> Enum.join(";")
 
     Map.merge(props, %{style: style_val})
-  end
-
-  # TODO: move to module?
-
-  def circle(%{items: items} = victor, %{x: x, y: y, r: r}, style \\ %{}) do
-    circle = {:circle, get_tag_props(%{cx: x, cy: y, r: r}, style), []}
-    new_items = [circle | items]
-
-    %Victor{victor | items: new_items}
-  end
-
-  def rect(%{items: items} = victor, props, style \\ %{}) do
-    rect = {:rect, get_tag_props(props, style), []}
-    new_items = [rect | items]
-
-    %Victor{victor | items: new_items}
   end
 end

@@ -20,7 +20,7 @@ defmodule VictorTest do
   test "draws a circle" do
     result =
       Victor.new()
-      |> Victor.circle(%{x: 50, y: 50, r: 40})
+      |> Victor.add(:circle, %{cx: 50, cy: 50, r: 40})
       |> Victor.get_svg()
 
     expected =
@@ -37,7 +37,7 @@ defmodule VictorTest do
   test "draws a rectangle" do
     result =
       Victor.new()
-      |> Victor.rect(%{x: 10, y: 10, width: 80, height: 20})
+      |> Victor.add(:rect, %{x: 10, y: 10, width: 80, height: 20})
       |> Victor.get_svg()
 
     expected =
@@ -54,7 +54,8 @@ defmodule VictorTest do
   test "draws a styled rectangle" do
     result =
       Victor.new()
-      |> Victor.rect(
+      |> Victor.add(
+        :rect,
         %{x: 10, y: 10, width: 80, height: 20},
         %{fill: "blue", stroke: "red"}
       )
@@ -69,5 +70,22 @@ defmodule VictorTest do
       |> Enum.join("\n")
 
     assert result == expected
+  end
+
+  test "draws a line" do
+    result =
+      Victor.new()
+      |> Victor.add(:line, %{x1: 10, y1: 10, x2: 40, y2: 40})
+      |> Victor.get_svg()
+
+    expected =
+      [
+        ~s(<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">),
+        ~s(\t<line x1="10" x2="40" y1="10" y2="40" />),
+        '</svg>'
+      ]
+      |> Enum.join("\n")
+
+    assert result === expected
   end
 end
