@@ -50,4 +50,22 @@ defmodule VictorTest do
 
     assert result == expected
   end
+
+  test "draws a styled rectangle" do
+    result =
+      Victor.new()
+      |> Victor.style(%{fill: "blue", stroke: "red"})
+      |> Victor.rect(%{x: 10, y: 10, width: 80, height: 20})
+      |> Victor.build()
+
+    expected =
+      [
+        ~s(<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">),
+        ~s(\t<rect height="20" width="80" x="10" y="10" style="fill:blue;stroke:red" />),
+        '</svg>'
+      ]
+      |> Enum.join("\n")
+
+    assert result == expected
+  end
 end
