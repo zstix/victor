@@ -7,11 +7,9 @@ defmodule Victor do
 
   defstruct width: 100, height: 100, items: []
 
-  # TODO: rename?
   def new(), do: %Victor{}
 
-  # TODO: rename
-  def build(%{width: width, height: height, items: items}) do
+  def get_svg(%{width: width, height: height, items: items}) do
     {
       :svg,
       %{
@@ -23,8 +21,7 @@ defmodule Victor do
     |> tag_to_string()
   end
 
-  # TODO: rename
-  def create_file(svg, filepath) do
+  def write_file(svg, filepath) do
     File.write(filepath, svg)
   end
 

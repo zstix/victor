@@ -10,7 +10,7 @@ defmodule VictorTest do
   test "draws nothing when nothing is provided" do
     result =
       Victor.new()
-      |> Victor.build()
+      |> Victor.get_svg()
 
     expected = ~s(<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" />)
 
@@ -21,7 +21,7 @@ defmodule VictorTest do
     result =
       Victor.new()
       |> Victor.circle(%{x: 50, y: 50, r: 40})
-      |> Victor.build()
+      |> Victor.get_svg()
 
     expected =
       [
@@ -38,7 +38,7 @@ defmodule VictorTest do
     result =
       Victor.new()
       |> Victor.rect(%{x: 10, y: 10, width: 80, height: 20})
-      |> Victor.build()
+      |> Victor.get_svg()
 
     expected =
       [
@@ -58,7 +58,7 @@ defmodule VictorTest do
         %{x: 10, y: 10, width: 80, height: 20},
         %{fill: "blue", stroke: "red"}
       )
-      |> Victor.build()
+      |> Victor.get_svg()
 
     expected =
       [
