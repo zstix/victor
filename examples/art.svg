@@ -1,0 +1,5 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<text x="40" y="50">Tada!</text>
+			<circle cx="10" cy="50" r="10" style="fill:blue" />
+			<rect height="10" width="60" x="20" y="20" />
+</svg>
