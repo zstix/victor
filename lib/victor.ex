@@ -5,11 +5,13 @@ defmodule Victor do
 
   # TODO: document
 
-  defstruct width: 100, height: 100, items: [], style: %{}
+  defstruct width: 100, height: 100, items: []
 
+  # TODO: rename?
   def new(), do: %Victor{}
 
-  def build(%{width: width, height: height, items: items, style: style}) do
+  # TODO: rename
+  def build(%{width: width, height: height, items: items}) do
     {
       :svg,
       %{
@@ -18,9 +20,10 @@ defmodule Victor do
       },
       items
     }
-    |> tag_to_string(style)
+    |> tag_to_string()
   end
 
+  # TODO: rename
   def create_file(svg, filepath) do
     File.write(filepath, svg)
   end
@@ -40,66 +43,56 @@ defmodule Victor do
     |> Enum.join(" ")
   end
 
-  defp style_to_string(style, _) when style == %{}, do: ""
-  defp style_to_string(_, tag) when tag == :svg, do: ""
+  defp tag_to_string({tag, props, children}) do
+    tag_name = Atom.to_string(tag)
+    tag = ["<", tag_name, " ", props_to_string(props)]
 
-  defp style_to_string(style, _) do
-    [
-      ~s( style="),
+    child_tags =
+      children
+      |> Enum.map(&tag_to_string/1)
+      |> Enum.join("\n" <> get_indent(children))
+
+    tail =
+      case length(children) do
+        0 ->
+          [" />"]
+
+        _ ->
+          [
+            ">\n",
+            get_indent(children),
+            child_tags,
+            "\n</",
+            tag_name,
+            ">"
+          ]
+      end
+
+    Enum.join(tag ++ tail)
+  end
+
+  defp get_tag_props(props, style) when style == %{}, do: props
+
+  defp get_tag_props(props, style) do
+    style_val =
       style
       |> Enum.map(fn {key, value} -> "#{key}:#{value}" end)
-      |> Enum.join(";"),
-      "\""
-    ]
-    |> Enum.join()
-  end
+      |> Enum.join(";")
 
-  defp tag_to_string({tag, props, []}, style) do
-    [
-      "<",
-      Atom.to_string(tag),
-      " ",
-      props_to_string(props),
-      style_to_string(style, tag),
-      " />"
-    ]
-    |> Enum.join()
-  end
-
-  defp tag_to_string({tag, props, children}, style) do
-    [
-      "<",
-      Atom.to_string(tag),
-      " ",
-      props_to_string(props),
-      style_to_string(style, tag),
-      ">\n",
-      get_indent(children),
-      children
-      |> Enum.map(&tag_to_string(&1, style))
-      |> Enum.join("\n" <> get_indent(children)),
-      "\n</",
-      Atom.to_string(tag),
-      ">"
-    ]
-    |> Enum.join()
+    Map.merge(props, %{style: style_val})
   end
 
   # TODO: move to module?
 
-  def style(victor, style) do
-    %Victor{victor | style: style}
-  end
-
-  def circle(%{items: items} = victor, %{x: x, y: y, r: r}) do
-    circle = {:circle, %{cx: x, cy: y, r: r}, []}
+  def circle(%{items: items} = victor, %{x: x, y: y, r: r}, style \\ %{}) do
+    circle = {:circle, get_tag_props(%{cx: x, cy: y, r: r}, style), []}
     new_items = [circle | items]
 
     %Victor{victor | items: new_items}
   end
 
-  def rect(%{items: items} = victor, props) do
-    rect = {:rect, props, []}
+  def rect(%{items: items} = victor, props, style \\ %{}) do
+    rect = {:rect, get_tag_props(props, style), []}
     new_items = [rect | items]
 
     %Victor{victor | items: new_items}
