@@ -9,45 +9,56 @@ defmodule Victor do
 
   def new(), do: %Victor{}
 
-  def build(%{width: width, height: height, items: []}) do
-    svg = {
-      :svg,
-      %{viewBox: "0 0 #{width} #{height}", xmlns: "http://www.w3.org/2000/svg"},
-      nil
-    }
-
-    tag_to_string(svg)
-  end
-
   def build(%{width: width, height: height, items: items}) do
-    [
-      ~s(<svg viewBox="0 0 #{width} #{height}" xmlns="http://www.w3.org/2000/svg">),
-      Enum.map(items, &tag_to_string/1),
-      "</svg>"
-    ]
-    |> Enum.join("\n")
+    {
+      :svg,
+      %{
+        viewBox: "0 0 #{width} #{height}",
+        xmlns: "http://www.w3.org/2000/svg"
+      },
+      items
+    }
+    |> tag_to_string()
   end
 
   def create_file(svg, filepath) do
     File.write(filepath, svg)
   end
 
-  # TODO: make this work with children
-  # TODO: use this to build rather than looping above
-  defp tag_to_string({tag, props, nil}) do
-    [
-      "<#{Atom.to_string(tag)}",
-      props
-      |> Enum.map(fn {key, value} -> ~s(#{key}="#{value}") end),
-      "/>"
-    ]
-    |> List.flatten()
+  defp get_indent(children) do
+    children
+    |> length()
+    |> Range.new(0)
+    |> Enum.map(fn _ -> "\t" end)
+    |> tl()
+    |> Enum.join()
+  end
+
+  defp props_to_string(props) do
+    props
+    |> Enum.map(fn {key, value} -> ~s(#{key}="#{value}") end)
     |> Enum.join(" ")
+  end
+
+  defp tag_to_string({tag, props, []}) do
+    ~s(<#{Atom.to_string(tag)} #{props_to_string(props)} />)
+  end
+
+  defp tag_to_string({tag, props, children}) do
+    [
+      ~s(<#{Atom.to_string(tag)} #{props_to_string(props)}>\n),
+      get_indent(children),
+      children
+      |> Enum.map(&tag_to_string/1)
+      |> Enum.join("\n" <> get_indent(children)),
+      ~s(\n</#{Atom.to_string(tag)}>)
+    ]
+    |> Enum.join()
   end
 
   # TODO: move to module?
   def circle(%{items: items} = victor, %{x: x, y: y, r: r}) do
-    circle = {:circle, %{cx: x, cy: y, r: r}, nil}
+    circle = {:circle, %{cx: x, cy: y, r: r}, []}
     new_items = [circle | items]
 
     %Victor{victor | items: new_items}
