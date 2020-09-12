@@ -6,6 +6,8 @@ A simple solution for creating SVGs in Elixir.
 
 _What's your vector victor?_
 
+Full documentation can be found at [https://hexdocs.pm/victor](https://hexdocs.pm/victor).
+
 ## Installation
 
 The package can be installed by adding `victor` to your list of dependencies
@@ -31,5 +33,3 @@ end
 ```
 
 ![Example](https://github.com/zstix/victor/blob/master/examples/art.svg?raw=true)
-
-Full documentation can be found at [https://hexdocs.pm/victor](https://hexdocs.pm/victor).
