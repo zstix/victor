@@ -11,7 +11,11 @@ defmodule Victor.MixProject do
       package: package(),
       name: "Victor",
       description: description(),
-      source_url: "https://github.com/zstix/victor"
+      source_url: "https://github.com/zstix/victor",
+      docs: [
+        main: "Victor",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -29,7 +33,7 @@ defmodule Victor.MixProject do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*"],
+      files: ["lib", "mix.exs", "README.md"],
       maintainers: ["Zack Stickles"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/zstix/victor"}

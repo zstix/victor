@@ -9,11 +9,9 @@ defmodule Victor do
   Creates a new Victor.
 
   ## Parameters
-
-      - size: An optional map with `width` and `height` keys.
+  - size: An optional map with `width` and `height` keys.
 
   ## Examples
-
       iex> Victor.new()
       %Victor{width: 100, height: 100, items: []}
 
@@ -30,14 +28,12 @@ defmodule Victor do
   Adds a new SVG item to a Victor.
 
   ## Parameters
-
-      - victor: A Victor struct to add the item to.
-      - tag: The SVG tag type to be added (as an atom).
-      - props: A map of properties for the SVG item (i.e. width).
-      - style: An optional map of style properties for the SVG item.
+  - victor: A Victor struct to add the item to.
+  - tag: The SVG tag type to be added (as an atom).
+  - props: A map of properties for the SVG item (i.e. width).
+  - style: An optional map of style properties for the SVG item.
 
   ## Examples
-
       iex> Victor.add(%Victor{}, :circle, %{cx: 10, cy: 10, r: 20})
       %Victor{width: 100, height: 100, items: [{:circle, %{cx: 10, cy: 10, r: 20}, []}]}
 
@@ -65,11 +61,9 @@ defmodule Victor do
   Gets the string representation of a SVG.
 
   ## Parameters
-
-      - victor: A Victor struct to convert to a string.
+  - victor: A Victor struct to convert to a string.
 
   ## Examples
-
       iex> Victor.get_svg(%Victor{})
       "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" />"
 
@@ -94,9 +88,8 @@ defmodule Victor do
   A simple wrapper around `File.write/2`.
 
   ## Parameters
-
-      - svg: A string representation of a SVG.
-      - filepath: The path to the file.
+  - svg: A string representation of a SVG.
+  - filepath: The path to the file.
   """
   def write_file(svg, filepath) do
     File.write(filepath, svg)
