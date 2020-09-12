@@ -1,9 +1,7 @@
 defmodule Victor do
   @moduledoc """
-  Documentation for `Victor`.
+  A simple SVG generator in pure Elixir.
   """
-
-  # TODO: document
 
   defstruct width: 100, height: 100, items: []
 
