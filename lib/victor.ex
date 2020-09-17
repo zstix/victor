@@ -1,7 +1,5 @@
 defmodule Victor do
-  @moduledoc """
-  A simple solution for creating SVGs in Elixir.
-  """
+  @moduledoc Victor.MixProject.project()[:description]
 
   defstruct width: 100, height: 100, items: []
 
