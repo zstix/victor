@@ -126,6 +126,10 @@ defmodule Victor do
     Enum.reduce(1..depth, "", fn _, str -> "\t" <> str end)
   end
 
+  defp get_content(content) do
+    String.replace(content, "&", "&amp;")
+  end
+
   defp tag_to_string({tag, props, children}, depth \\ 0) do
     tabs = get_tabs(depth)
     tag = Atom.to_string(tag)
@@ -133,7 +137,7 @@ defmodule Victor do
 
     case children do
       "" <> content ->
-        ~s(#{tabs}<#{tag} #{props}>#{content}</#{tag}>)
+        ~s(#{tabs}<#{tag} #{props}>#{get_content(content)}</#{tag}>)
 
       [] ->
         ~s(#{tabs}<#{tag} #{props} />)
