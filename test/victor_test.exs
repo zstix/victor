@@ -107,4 +107,23 @@ defmodule VictorTest do
 
     assert result == expected
   end
+
+  test "indents the right number of times" do
+    result =
+      Victor.new()
+      |> Victor.add(:circle, %{cx: 50, cy: 50, r: 40})
+      |> Victor.add(:circle, %{cx: 80, cy: 80, r: 40})
+      |> Victor.get_svg()
+
+    expected =
+      [
+        @svg_open_tag,
+        ~s(\t<circle cx="80" cy="80" r="40" />),
+        ~s(\t<circle cx="50" cy="50" r="40" />),
+        '</svg>'
+      ]
+      |> Enum.join("\n")
+
+    assert result == expected
+  end
 end

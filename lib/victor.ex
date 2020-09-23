@@ -114,54 +114,39 @@ defmodule Victor do
     File.write(filepath, svg)
   end
 
-  defp get_indent(children) do
-    children
-    |> length()
-    |> Range.new(0)
-    |> Enum.map(fn _ -> "\t" end)
-    |> tl()
-    |> Enum.join()
-  end
-
   defp props_to_string(props) do
     props
     |> Enum.map(fn {key, value} -> ~s(#{key}="#{value}") end)
     |> Enum.join(" ")
   end
 
-  defp tag_to_string({tag, props, children}) when is_list(children) do
-    tag_name = Atom.to_string(tag)
-    tag = ["<", tag_name, " ", props_to_string(props)]
+  defp get_tabs(0), do: ""
 
-    child_tags =
-      children
-      |> Enum.map(&tag_to_string/1)
-      |> Enum.join("\n" <> get_indent(children))
-
-    tail =
-      case length(children) do
-        0 ->
-          [" />"]
-
-        _ ->
-          [
-            ">\n",
-            get_indent(children),
-            child_tags,
-            "\n</",
-            tag_name,
-            ">"
-          ]
-      end
-
-    Enum.join(tag ++ tail)
+  defp get_tabs(depth) do
+    Enum.reduce(1..depth, "", fn _, str -> "\t" <> str end)
   end
 
-  defp tag_to_string({tag, props, children}) when is_bitstring(children) do
-    tag_name = Atom.to_string(tag)
+  defp tag_to_string({tag, props, children}, depth \\ 0) do
+    tabs = get_tabs(depth)
+    tag = Atom.to_string(tag)
+    props = props_to_string(props)
 
-    ["<", tag_name, " ", props_to_string(props), ">", children, "</", tag_name, ">"]
-    |> Enum.join()
+    case children do
+      "" <> content ->
+        ~s(#{tabs}<#{tag} #{props}>#{content}</#{tag}>)
+
+      [] ->
+        ~s(#{tabs}<#{tag} #{props} />)
+
+      _ ->
+        [
+          ~s(#{tabs}<#{tag} #{props}>),
+          Enum.map(children, &tag_to_string(&1, depth + 1)),
+          ~s(</#{tag}>)
+        ]
+        |> List.flatten()
+        |> Enum.join("\n")
+    end
   end
 
   defp get_tag_props(props, style) when style == %{}, do: props
