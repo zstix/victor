@@ -15,7 +15,7 @@ in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:victor, "~> 0.1.0"}]
+  [{:victor, "~> 0.1.1"}]
 end
 ```
 
