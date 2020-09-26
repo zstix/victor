@@ -108,6 +108,31 @@ defmodule VictorTest do
     assert result == expected
   end
 
+  test "renders paths" do
+    path = [
+      [:m, 10, 30],
+      [:a, 20, 20, 0, 0, 1, 50, 30],
+      [:a, 20, 20, 0, 0, 1, 90, 30],
+      [:q, 90, 60, 50, 90],
+      [:q, 10, 60, 10, 30]
+    ]
+
+    result =
+      Victor.new()
+      |> Victor.add(:path, path, %{stroke: "black"})
+      |> Victor.get_svg()
+
+    expected =
+      [
+        @svg_open_tag,
+        ~s(\t<path d="M 10 30 A 20 20 0 0 1 50 30 A 20 20 0 0 1 90 30 Q 90 60 50 90 Q 10 60 10 30" style="stroke:black" />),
+        '</svg>'
+      ]
+      |> Enum.join("\n")
+
+    assert result == expected
+  end
+
   test "indents the right number of times" do
     result =
       Victor.new()

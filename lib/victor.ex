@@ -66,6 +66,13 @@ defmodule Victor do
             Map.get(props, :content)
           }
 
+        :path ->
+          {
+            tag,
+            Map.merge(get_path(props), get_tag_props(%{}, style)),
+            []
+          }
+
         _ ->
           {tag, get_tag_props(props, style), []}
       end
@@ -116,6 +123,25 @@ defmodule Victor do
   """
   def write_file(svg, filepath) do
     File.write(filepath, svg)
+  end
+
+  defp get_path(path) do
+    d =
+      path
+      |> Enum.map(&get_path_item/1)
+      |> Enum.join(" ")
+
+    %{d: d}
+  end
+
+  defp get_path_item(item) do
+    type =
+      item
+      |> hd()
+      |> Atom.to_string()
+      |> String.upcase()
+
+    Enum.join([type | tl(item)], " ")
   end
 
   defp props_to_string(props) do
