@@ -37,14 +37,16 @@ defmodule Victor do
 
   ## Examples
 
-      iex> Victor.add(%Victor{}, :circle, %{cx: 10, cy: 10, r: 20})
+      iex> Victor.new()
+      ...> |> Victor.add(:circle, %{cx: 10, cy: 10, r: 20})
       %Victor{
         height: 100,
         items: [{:circle, %{cx: 10, cy: 10, r: 20}, []}],
         width: 100
       }
 
-      iex> Victor.add(%Victor{}, :rect, %{x: 10, y: 10, width: 100, height: 50}, %{fill: "red"})
+      iex> Victor.new()
+      ...> |> Victor.add(:rect, %{x: 10, y: 10, width: 100, height: 50}, %{fill: "red"})
       %Victor{
         height: 100,
         items: [
@@ -83,7 +85,9 @@ defmodule Victor do
       iex> Victor.get_svg(%Victor{})
       "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" />"
 
-      iex> Victor.add(%Victor{}, :circle, %{cx: 10, cy: 10, r: 20}) |> Victor.get_svg()
+      iex> Victor.new()
+      ...> |> Victor.add(:circle, %{cx: 10, cy: 10, r: 20})
+      ...> |> Victor.get_svg()
       "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\">\n\t<circle cx=\"10\" cy=\"10\" r=\"20\" />\n</svg>"
 
   """
