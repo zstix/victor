@@ -55,6 +55,17 @@ defmodule Victor do
         width: 100
       }
 
+      iex> Victor.new()
+      ...> |> Victor.add(:path, [[:m, 130, 110], [:c, 120, 140, 180, 140, 170, 110]])
+      %Victor{
+        height: 100,
+        items: [
+          {:path, %{d: "M 130 110 C 120 140 180 140 170 110"}, []}
+        ],
+        width: 100
+      }
+
+
   """
   def add(%{items: items} = victor, tag, props, style \\ %{}) do
     item =
